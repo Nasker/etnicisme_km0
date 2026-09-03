@@ -1,0 +1,44 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import ExhibitLayout from '../../layouts/ExhibitLayout.astro';
+import { getExhibitViews } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const views = await getExhibitViews();
+
+  // People with 2+ exhibits get a dedicated page.
+  const personCounts = new Map<string, number>();
+  for (const v of views) {
+    personCounts.set(v.personSlug, (personCounts.get(v.personSlug) ?? 0) + 1);
+  }
+
+  return views.map((v, i) => {
+    const prev = i > 0 ? views[i - 1] : undefined;
+    const next = i < views.length - 1 ? views[i + 1] : undefined;
+    return {
+      params: { slug: v.entry.id },
+      props: {
+        view: v,
+        personHasPage: (personCounts.get(v.personSlug) ?? 0) >= 2,
+        prev: prev ? { slug: prev.entry.id, id: prev.entry.data.id } : undefined,
+        next: next ? { slug: next.entry.id, id: next.entry.data.id } : undefined,
+      },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+const { view, personHasPage, prev, next } = Astro.props;
+const { Content } = await render(view.entry);
+---
+
+<ExhibitLayout
+  entry={view.entry}
+  room={view.room}
+  personSlug={view.personSlug}
+  personHasPage={personHasPage}
+  prev={prev}
+  next={next}
+>
+  <Content />
+</ExhibitLayout>

@@ -1,0 +1,26 @@
+---
+interface Props {
+  exhibitId: string;
+  roomNumber: string;
+  roomTitle: string;
+  person: string;
+  year: string | number;
+}
+
+const { exhibitId, roomNumber, roomTitle, person, year } = Astro.props;
+---
+
+<div class="label">
+  <div class="label__row">
+    <span>Exhibit</span>
+    <span>{exhibitId}</span>
+  </div>
+  <div class="label__row">
+    <span>Sala {roomNumber}</span>
+    <span>{roomTitle}</span>
+  </div>
+  <div class="label__row">
+    <span>{person}</span>
+    <span>{year}</span>
+  </div>
+</div>

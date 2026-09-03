@@ -1,0 +1,54 @@
+---
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExhibitCard from '../../components/ExhibitCard.astro';
+import { getExhibitViews, getRoomsSorted, year } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+  const rooms = await getRoomsSorted();
+  return rooms.map((room) => ({ params: { room: room.id }, props: { room } }));
+}) satisfies GetStaticPaths;
+
+const { room } = Astro.props;
+const views = (await getExhibitViews()).filter((v) => v.room.id === room.id);
+---
+
+<BaseLayout title={`Sala ${room.data.number} — ${room.data.title}`}>
+  <div class="container" style="padding-block:2.5rem 4rem">
+    <p class="meta meta--accent">Sala {room.data.number}</p>
+    <h1 class="exhibit__title" style="margin-top:.5rem">{room.data.title}</h1>
+    {room.data.subtitle && <p class="lede">{room.data.subtitle}</p>}
+    <p class="prose">{room.data.description}</p>
+
+    <hr class="rule rule--strong" />
+
+    <div class="section-head">
+      <h2>Peces</h2>
+      <span class="meta">{views.length}</span>
+    </div>
+
+    {
+      views.length > 0 ? (
+        <div class="grid grid--cards">
+          {views.map((v) => (
+            <ExhibitCard
+              id={v.entry.data.id}
+              slug={v.entry.id}
+              quote={v.entry.data.quote}
+              person={v.entry.data.person.name}
+              personSlug={v.personSlug}
+              year={year(v.entry.data.date)}
+              room={v.room.id}
+              roomTitle={v.room.data.title}
+              topics={v.entry.data.topics}
+            />
+          ))}
+        </div>
+      ) : (
+        <p class="lede">Encara no hi ha peces en aquesta sala.</p>
+      )
+    }
+
+    <p style="margin-top:2rem"><a class="btn" href="/museu">← Totes les sales</a></p>
+  </div>
+</BaseLayout>

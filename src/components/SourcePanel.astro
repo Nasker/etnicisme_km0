@@ -1,0 +1,61 @@
+---
+interface ContextualSource {
+  publication: string;
+  title: string;
+  url?: string;
+}
+
+interface Props {
+  person: string;
+  platform: string;
+  date: string;
+  url: string;
+  archiveUrl?: string;
+  contextualSources?: ContextualSource[];
+}
+
+const { person, platform, date, url, archiveUrl, contextualSources = [] } =
+  Astro.props;
+---
+
+<aside class="source">
+  <div>
+    <p class="source__label">Font primària</p>
+    <p class="source__who">{person}</p>
+    <p class="meta">{platform} · {date}</p>
+  </div>
+
+  <div class="source__links">
+    <a class="btn btn--accent" href={url} target="_blank" rel="noopener noreferrer nofollow">
+      Publicació original ↗
+    </a>
+    {
+      archiveUrl && (
+        <a class="btn" href={archiveUrl} target="_blank" rel="noopener noreferrer nofollow">
+          Còpia arxivada ↗
+        </a>
+      )
+    }
+  </div>
+
+  {
+    contextualSources.length > 0 && (
+      <div class="source__secondary">
+        <p class="source__label">Fonts contextuals</p>
+        {contextualSources.map((s) => (
+          <p class="meta" style="text-transform:none;letter-spacing:.02em">
+            {s.url ? (
+              <a href={s.url} target="_blank" rel="noopener noreferrer nofollow">
+                {s.publication} — {s.title}
+              </a>
+            ) : (
+              <span>
+                {s.publication} — {s.title}
+              </span>
+            )}
+          </p>
+        ))}
+      </div>
+    )
+  }
+</aside>
