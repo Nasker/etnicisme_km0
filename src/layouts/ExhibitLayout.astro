@@ -3,6 +3,7 @@ import BaseLayout from './BaseLayout.astro';
 import MuseumLabel from '../components/MuseumLabel.astro';
 import SourcePanel from '../components/SourcePanel.astro';
 import ContextReveal from '../components/ContextReveal.astro';
+import { url } from '../lib/url';
 import { formatDate, year, type Exhibit, type Room } from '../lib/content';
 
 interface Pager {
@@ -39,7 +40,7 @@ const contextualSources = d.contextual_sources;
     <p class="meta">
       {
         personHasPage ? (
-          <a href={`/persones/${personSlug}`}>{d.person.name}</a>
+          <a href={url(`persones/${personSlug}`)}>{d.person.name}</a>
         ) : (
           d.person.name
         )
@@ -78,18 +79,18 @@ const contextualSources = d.contextual_sources;
     <nav class="pager" aria-label="Navegació entre peces">
       {
         prev ? (
-          <a class="btn" href={`/exhibits/${prev.slug}`}>← {prev.id}</a>
+          <a class="btn" href={url(`exhibits/${prev.slug}`)}>← {prev.id}</a>
         ) : (
           <span />
         )
       }
       {
         next ? (
-          <a class="btn btn--accent" href={`/exhibits/${next.slug}`}>
+          <a class="btn btn--accent" href={url(`exhibits/${next.slug}`)}>
             Següent peça: {next.id} →
           </a>
         ) : (
-          <a class="btn" href="/museu">Totes les peces</a>
+          <a class="btn" href={url('museu')}>Totes les peces</a>
         )
       }
     </nav>

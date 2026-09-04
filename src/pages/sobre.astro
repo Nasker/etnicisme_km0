@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/url';
 ---
 
 <BaseLayout title="Sobre el projecte">
@@ -39,7 +40,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <h2>Política de correccions</h2>
     <p>
       Els errors es corregeixen de manera pública i mai en silenci. Consulteu
-      la pàgina de <a href="/correccions">correccions</a>.
+      la pàgina de <a href={url('correccions')}>correccions</a>.
     </p>
 
     <h2>Independència</h2>

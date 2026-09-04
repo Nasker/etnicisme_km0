@@ -1,18 +1,21 @@
 ---
-const path = Astro.url.pathname;
-const isActive = (href: string) =>
-  href === '/' ? path === '/' : path.startsWith(href);
+import { url } from '../lib/url';
 
+const path = Astro.url.pathname;
+const homeHref = url('');
 const links = [
-  { href: '/museu', label: 'El museu' },
-  { href: '/sobre', label: 'Sobre' },
-  { href: '/correccions', label: 'Correccions' },
+  { href: url('museu'), label: 'El museu' },
+  { href: url('sobre'), label: 'Sobre' },
+  { href: url('correccions'), label: 'Correccions' },
 ];
+
+const isActive = (href: string) =>
+  href === homeHref ? (path === homeHref || path === import.meta.env.BASE_URL) : path.startsWith(href);
 ---
 
 <header class="site-header">
   <div class="container site-header__inner">
-    <a class="site-header__brand" href="/">
+    <a class="site-header__brand" href={homeHref}>
       Etnicisme
       <strong>km 0</strong>
     </a>

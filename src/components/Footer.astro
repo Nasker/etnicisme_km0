@@ -1,4 +1,6 @@
 ---
+import { url } from '../lib/url';
+
 const year = new Date().getFullYear();
 ---
 
@@ -9,9 +11,9 @@ const year = new Date().getFullYear();
       <p style="margin:0">Projecte independent · {year}</p>
     </div>
     <nav aria-label="Peu">
-      <p style="margin:0 0 .4rem"><a href="/museu">El museu</a></p>
-      <p style="margin:0 0 .4rem"><a href="/sobre">Sobre el projecte</a></p>
-      <p style="margin:0"><a href="/correccions">Correccions</a></p>
+      <p style="margin:0 0 .4rem"><a href={url('museu')}>El museu</a></p>
+      <p style="margin:0 0 .4rem"><a href={url('sobre')}>Sobre el projecte</a></p>
+      <p style="margin:0"><a href={url('correccions')}>Correccions</a></p>
     </nav>
     <div style="max-width:28ch">
       <p style="margin:0">

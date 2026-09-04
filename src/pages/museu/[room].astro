@@ -2,6 +2,7 @@
 import type { GetStaticPaths } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ExhibitCard from '../../components/ExhibitCard.astro';
+import { url } from '../../lib/url';
 import { getExhibitViews, getRoomsSorted, year } from '../../lib/content';
 
 export const getStaticPaths = (async () => {
@@ -49,6 +50,6 @@ const views = (await getExhibitViews()).filter((v) => v.room.id === room.id);
       )
     }
 
-    <p style="margin-top:2rem"><a class="btn" href="/museu">← Totes les sales</a></p>
+    <p style="margin-top:2rem"><a class="btn" href={url('museu')}>← Totes les sales</a></p>
   </div>
 </BaseLayout>

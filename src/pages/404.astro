@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { url } from '../lib/url';
 ---
 
 <BaseLayout title="Sala no trobada">
@@ -9,6 +10,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <p class="lede" style="margin-inline:auto">
       La peça o la pàgina que busques no és a l'exposició.
     </p>
-    <p style="margin-top:2rem"><a class="btn btn--accent" href="/museu">Entrar al museu →</a></p>
+    <p style="margin-top:2rem"><a class="btn btn--accent" href={url('museu')}>Entrar al museu →</a></p>
   </div>
 </BaseLayout>

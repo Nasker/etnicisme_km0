@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ExhibitCard from '../components/ExhibitCard.astro';
+import { url } from '../lib/url';
 import { getExhibitViews, getRoomsSorted, year } from '../lib/content';
 
 const views = await getExhibitViews();
@@ -20,7 +21,7 @@ const featured = views.find((v) => v.entry.data.featured) ?? views[0];
       <p class="hero__claim">
         Les peces són reals.<br />Les fonts també.
       </p>
-      <a class="btn btn--accent" href="/museu">Entrar al museu →</a>
+      <a class="btn btn--accent" href={url('museu')}>Entrar al museu →</a>
     </div>
   </section>
 
@@ -75,7 +76,7 @@ const featured = views.find((v) => v.entry.data.featured) ?? views[0];
         identitat nacional, immigració, religió i pertinença.
       </p>
       <p class="lede">No et demanem que ens creguis. Mira les fonts.</p>
-      <p><a class="btn" href="/sobre">Sobre el projecte</a></p>
+      <p><a class="btn" href={url('sobre')}>Sobre el projecte</a></p>
     </section>
   </div>
 </BaseLayout>
