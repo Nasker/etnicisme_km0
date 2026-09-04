@@ -5,7 +5,7 @@ import sitemap from '@astrojs/sitemap';
 // Update `site` to the canonical production domain before deploying.
 // The QR code should point at `${site}/museu/`.
 export default defineConfig({
-  site: 'https://museu-etnicisme.pages.dev',
+  site: 'https://etnicisme-km0.pages.dev',
   trailingSlash: 'ignore',
   integrations: [sitemap()],
   build: {

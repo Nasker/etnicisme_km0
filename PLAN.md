@@ -1,5 +1,5 @@
 # PLAN.md
-# Museu de l'Etnicisme Català — MVP
+# Etnicisme km 0 — MVP
 
 ## 0. MVP Objective
 
@@ -114,7 +114,7 @@ Astro allows the majority of the site to be generated as static HTML, keeping th
 Keep the repository small.
 
 ```text
-museu-etnicisme/
+etnicisme_km0/
 │
 ├── public/
 │   ├── images/
@@ -370,9 +370,8 @@ The homepage should be extremely simple.
 ## Hero
 
 ```text
-MUSEU
-DE L'ETNICISME
-CATALÀ
+ETNICISME
+KM 0
 
 Una exposició sobre identitat,
 immigració, nació i exclusió.
@@ -1157,8 +1156,8 @@ The landing page should establish the project's voice.
 Possible copy:
 
 ```text
-MUSEU
-DE L'ETNICISME CATALÀ
+ETNICISME
+KM 0
 
 Una exposició permanent
 sobre identitat, nació,
@@ -1320,7 +1319,7 @@ A visitor scans a QR.
 
 They see:
 
-> **MUSEU DE L'ETNICISME CATALÀ**
+> **ETNICISME KM 0**
 
 They enter.
 

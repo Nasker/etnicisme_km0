@@ -9,14 +9,14 @@ interface Props {
 }
 
 const {
-  title = "Museu de l'Etnicisme Català",
+  title = "Etnicisme km 0",
   description = "Una exposició sobre identitat, immigració, nació i exclusió. Les peces són reals. Les fonts també.",
 } = Astro.props;
 
 const fullTitle =
-  title === "Museu de l'Etnicisme Català"
+  title === "Etnicisme km 0"
     ? title
-    : `${title} · Museu de l'Etnicisme Català`;
+    : `${title} · Etnicisme km 0`;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
