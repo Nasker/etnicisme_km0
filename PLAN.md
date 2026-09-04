@@ -59,7 +59,7 @@ Do **not** build a large database, accounts, comments, analytics system, sophist
 - Visitor tracking
 - Advanced analytics
 - Audio guides
-- User submissions
+- Public visitor submission form (proposals reviewed by editors; see §44)
 - Public API
 - Database
 - Complex timeline
@@ -1267,6 +1267,7 @@ These are **version 2+**, not MVP requirements.
 - source archive
 - quote wall
 - better filtering
+- **Visitor submission form** (propose new exhibits without an account; see §44)
 
 ## V3
 
@@ -1336,3 +1337,77 @@ They leave with a different understanding of what was actually said.
 That's the product.
 
 Everything else is infrastructure for making that experience better later.
+
+---
+
+# 44. Visitor Submission Form
+
+After the MVP, add a way for visitors to propose new exhibits without creating an account.
+
+## Rationale
+
+The museum's collection can grow faster if visitors can suggest pieces they have seen. Requiring sign-ups would create friction and moderation overhead. The proposal is reviewed by an editor before it ever appears on the site.
+
+## Principles
+
+- No visitor accounts.
+- No public publishing without editorial review.
+- Keep the site static; do not add a database for submissions.
+- Protect the submission process from simple spam without making it intrusive.
+
+## How it works
+
+```text
+[ PROPOSAR UNA PEÇA ]
+
+Visitor fills:
+
+- Enllaç o captura de la font
+- Persona o entitat
+- Data aproximada
+- Sala suggerida
+- Cita exacta
+- Contacte opcional (correu per a aclariments)
+
+[ ENVIAR PROPOSTA ]
+```
+
+On submit, the form sends the data to the administrator by email.
+
+## Implementation options
+
+### Option A — Form backend service (recommended)
+
+Use a form service such as **Formspree**, **Basin** or **Tally**. They provide an HTML form action URL, deliver submissions to an admin email, and can optionally forward to a spreadsheet. This keeps the Astro site static and requires no backend.
+
+```text
+<form action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+```
+
+Cost: free for low volume.
+
+### Option B — Cloudflare Pages Function + email API
+
+If the site is already on Cloudflare Pages, add a small Pages Function at `/api/propose` that receives the POST, validates it, and sends it via an email API (Mailchannels, SendGrid, Mailgun, or a private SMTP relay). This gives more control but introduces a small server-side component and an API key or sender domain to manage.
+
+### Option C — Simple mailto form (not recommended)
+
+A `mailto:` link is easy but loses data formatting and is unreliable on phones. Avoid unless no other option is available.
+
+## Admin workflow
+
+```text
+1. Receive proposal by email.
+2. Verify the source independently.
+3. Research context.
+4. If accepted, write the exhibit following §4.1 and §5.
+5. If rejected, keep no record of the contact unless requested.
+```
+
+## Privacy note
+
+Only collect the minimum information needed. Make it clear that submitting a proposal does not make it public automatically and that the museum may not respond to every suggestion.
+
+## Editorial safeguard
+
+A proposal is **not** an exhibit. It becomes an exhibit only after the same verification process as any other piece (see §5).
