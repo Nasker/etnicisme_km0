@@ -1,0 +1,18 @@
+---
+interface Props {
+  number: string;
+  title: string;
+  slug: string;
+  description: string;
+  count: number;
+}
+
+const { number, title, slug, description, count } = Astro.props;
+---
+
+<a class="room-card" href={`/museu/${slug}`}>
+  <span class="room-card__num">{number}</span>
+  <h3 class="room-card__title">{title}</h3>
+  <p class="room-card__desc">{description}</p>
+  <span class="meta">{count} {count === 1 ? 'peça' : 'peces'}</span>
+</a>

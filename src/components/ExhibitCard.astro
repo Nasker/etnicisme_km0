@@ -1,0 +1,35 @@
+---
+interface Props {
+  id: string;
+  slug: string;
+  quote: string;
+  person: string;
+  personSlug: string;
+  year: string | number;
+  room: string;
+  roomTitle: string;
+  topics: string[];
+}
+
+const { id, slug, quote, person, year, room, roomTitle, topics } = Astro.props;
+const short = quote.length > 140 ? quote.slice(0, 137).trimEnd() + '…' : quote;
+---
+
+<a
+  class="card"
+  href={`/exhibits/${slug}`}
+  data-exhibit
+  data-room={room}
+  data-person={Astro.props.personSlug}
+  data-topics={topics.join(' ')}
+>
+  <span class="meta">{id}</span>
+  <p class="card__quote">“{short}”</p>
+  <div class="card__foot">
+    <span class="meta">{person} · {year}</span>
+    <div class="topic-tags">
+      <span class="topic-tag">{roomTitle}</span>
+    </div>
+    <span class="card__cta">Veure peça →</span>
+  </div>
+</a>

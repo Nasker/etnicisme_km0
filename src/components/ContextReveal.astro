@@ -1,0 +1,21 @@
+---
+interface Props {
+  quote: string;
+}
+
+const { quote } = Astro.props;
+---
+
+<details class="reveal">
+  <summary>
+    <p class="reveal__eyebrow">El que es va dir</p>
+    <blockquote class="said">“{quote}”</blockquote>
+    <span class="reveal__toggle">
+      <span class="reveal__toggle-closed">Mostra el context</span>
+      <span class="reveal__toggle-open">Amaga el context</span>
+    </span>
+  </summary>
+  <div class="reveal__body prose">
+    <slot />
+  </div>
+</details>

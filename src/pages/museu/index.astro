@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ExhibitCard from '../../components/ExhibitCard.astro';
+import RoomCard from '../../components/RoomCard.astro';
+import { getExhibitViews, getRoomsSorted, year } from '../../lib/content';
+
+const views = await getExhibitViews();
+const rooms = await getRoomsSorted();
+
+const countByRoom = (roomId: string) =>
+  views.filter((v) => v.room.id === roomId).length;
+
+// Build filter option lists
+const people = new Map<string, string>();
+const topics = new Set<string>();
+for (const v of views) {
+  people.set(v.personSlug, v.entry.data.person.name);
+  for (const t of v.entry.data.topics) topics.add(t);
+}
+const peopleList = [...people.entries()].sort((a, b) => a[1].localeCompare(b[1]));
+const topicList = [...topics].sort();
+---
+
+<BaseLayout title="El museu">
+  <div class="container" style="padding-block:2.5rem 4rem">
+    <section>
+      <div class="section-head">
+        <h2>Sales</h2>
+        <span class="meta">{rooms.length}</span>
+      </div>
+      <div class="grid grid--rooms">
+        {
+          rooms.map((room) => (
+            <RoomCard
+              number={room.data.number}
+              title={room.data.title}
+              slug={room.id}
+              description={room.data.description}
+              count={countByRoom(room.id)}
+            />
+          ))
+        }
+      </div>
+    </section>
+
+    <hr class="rule rule--strong" />
+
+    <section>
+      <div class="section-head">
+        <h2>Totes les peces</h2>
+        <span class="meta"><span data-count>{views.length}</span> visibles</span>
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <span class="filter-group__label">Sala</span>
+          <a class="filter-chip" href="/museu" data-filter="room" data-value="">Totes</a>
+          {
+            rooms.map((room) => (
+              <a
+                class="filter-chip"
+                href={`/museu?room=${room.id}`}
+                data-filter="room"
+                data-value={room.id}
+              >
+                {room.data.number}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <span class="filter-group__label">Persona</span>
+          <a class="filter-chip" href="/museu" data-filter="person" data-value="">Totes</a>
+          {
+            peopleList.map(([slug, name]) => (
+              <a
+                class="filter-chip"
+                href={`/museu?person=${slug}`}
+                data-filter="person"
+                data-value={slug}
+              >
+                {name}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="filter-group">
+          <span class="filter-group__label">Tema</span>
+          <a class="filter-chip" href="/museu" data-filter="topic" data-value="">Tots</a>
+          {
+            topicList.map((t) => (
+              <a
+                class="filter-chip"
+                href={`/museu?topic=${t}`}
+                data-filter="topic"
+                data-value={t}
+              >
+                {t}
+              </a>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="grid grid--cards" style="margin-top:1.5rem">
+        {
+          views.map((v) => (
+            <ExhibitCard
+              id={v.entry.data.id}
+              slug={v.entry.id}
+              quote={v.entry.data.quote}
+              person={v.entry.data.person.name}
+              personSlug={v.personSlug}
+              year={year(v.entry.data.date)}
+              room={v.room.id}
+              roomTitle={v.room.data.title}
+              topics={v.entry.data.topics}
+            />
+          ))
+        }
+      </div>
+
+      <p data-empty class="lede is-hidden" style="margin-top:2rem">
+        Cap peça coincideix amb aquest filtre.
+      </p>
+    </section>
+  </div>
+
+  <script>
+    import '../../components/Filters.ts';
+  </script>
+</BaseLayout>

@@ -1,0 +1,97 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import MuseumLabel from '../components/MuseumLabel.astro';
+import SourcePanel from '../components/SourcePanel.astro';
+import ContextReveal from '../components/ContextReveal.astro';
+import { formatDate, year, type Exhibit, type Room } from '../lib/content';
+
+interface Pager {
+  slug: string;
+  id: string;
+}
+
+interface Props {
+  entry: Exhibit;
+  room: Room;
+  personSlug: string;
+  personHasPage: boolean;
+  next?: Pager;
+  prev?: Pager;
+}
+
+const { entry, room, personSlug, personHasPage, next, prev } = Astro.props;
+const d = entry.data;
+const contextualSources = d.contextual_sources;
+---
+
+<BaseLayout title={`${d.id} — ${d.title}`} description={d.quote}>
+  <article class="exhibit container container--reading" style="margin-inline:auto">
+    <MuseumLabel
+      exhibitId={d.id}
+      roomNumber={room.data.number}
+      roomTitle={room.data.title}
+      person={d.person.name}
+      year={year(d.date)}
+    />
+
+    <h1 class="exhibit__title">{d.title}</h1>
+
+    <p class="meta">
+      {
+        personHasPage ? (
+          <a href={`/persones/${personSlug}`}>{d.person.name}</a>
+        ) : (
+          d.person.name
+        )
+      }
+      {d.organisation && <> · {d.organisation.name}</>}
+      · {formatDate(d.date)}
+    </p>
+    <p style="margin-top:.5rem"><span class="fiction-tag">Peça fictícia</span></p>
+
+    <!-- Primary source is visually dominant, before interpretation -->
+    <figure class="screenshot" style="margin-block:2rem">
+      <div class="screenshot__placeholder">
+        <span class="meta">Original</span>
+        <span>{d.media?.alt ?? 'Captura de la publicació original (pendent)'}</span>
+        <span class="meta">Sense retocar</span>
+      </div>
+    </figure>
+
+    <SourcePanel
+      person={d.person.name}
+      platform={d.source.platform}
+      date={formatDate(d.date)}
+      url={d.source.url}
+      archiveUrl={d.source.archive_url}
+      contextualSources={contextualSources}
+    />
+
+    <div style="margin-block:2.5rem">
+      <ContextReveal quote={d.quote}>
+        <slot />
+      </ContextReveal>
+    </div>
+
+    <hr class="rule" />
+
+    <nav class="pager" aria-label="Navegació entre peces">
+      {
+        prev ? (
+          <a class="btn" href={`/exhibits/${prev.slug}`}>← {prev.id}</a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next ? (
+          <a class="btn btn--accent" href={`/exhibits/${next.slug}`}>
+            Següent peça: {next.id} →
+          </a>
+        ) : (
+          <a class="btn" href="/museu">Totes les peces</a>
+        )
+      }
+    </nav>
+  </article>
+</BaseLayout>

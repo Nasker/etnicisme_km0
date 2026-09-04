@@ -1,0 +1,29 @@
+---
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+
+const links = [
+  { href: '/museu', label: 'El museu' },
+  { href: '/sobre', label: 'Sobre' },
+  { href: '/correccions', label: 'Correccions' },
+];
+---
+
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a class="site-header__brand" href="/">
+      Museu de
+      <strong>l'Etnicisme Català</strong>
+    </a>
+    <nav class="site-nav" aria-label="Principal">
+      {
+        links.map((l) => (
+          <a href={l.href} aria-current={isActive(l.href) ? 'page' : undefined}>
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+  </div>
+</header>
