@@ -1,0 +1,163 @@
+---
+interface Props {
+  rooms: { id: string; title: string }[];
+  people: { id: string; name: string }[];
+  existingIds: string[];
+}
+
+const { rooms, people, existingIds } = Astro.props;
+const today = new Date().toISOString().split('T')[0];
+---
+
+<form
+  id="contribute-form"
+  class="form"
+  data-rooms={JSON.stringify(rooms)}
+  data-people={JSON.stringify(people)}
+  data-existing-ids={JSON.stringify(existingIds)}
+>
+  <div class="form__row">
+    <div class="form__group">
+      <label class="form__label" for="date">Data de la publicació</label>
+      <input class="form__input" id="date" name="date" type="date" value={today} required />
+    </div>
+    <div class="form__group" style="display:flex;align-items:end;gap:.5rem">
+      <div style="flex:1">
+        <label class="form__label" for="id">Identificador</label>
+        <input class="form__input" id="id" name="id" type="text" placeholder="EX-2026-013" required />
+      </div>
+      <button type="button" class="btn" id="suggest-id">Generar</button>
+    </div>
+  </div>
+
+  <div class="form__group">
+    <label class="form__label" for="title">Títol de la peça</label>
+    <input class="form__input" id="title" name="title" type="text" required />
+  </div>
+
+  <div class="form__row">
+    <div class="form__group">
+      <label class="form__label" for="person">Persona</label>
+      <select class="form__select" id="person" name="person" required>
+        <option value="">— Trieu una persona —</option>
+        <option value="__new__">+ Nova persona</option>
+        {
+          people.map((p) => (
+            <option value={p.id}>{p.name}</option>
+          ))
+        }
+      </select>
+      <p class="form__hint">Si la persona no existeix, trieu “Nova persona”.</p>
+    </div>
+    <div class="form__group">
+      <label class="form__label" for="room">Sala</label>
+      <select class="form__select" id="room" name="room" required>
+        <option value="">— Trieu una sala —</option>
+        {
+          rooms.map((r) => (
+            <option value={r.id}>{r.title}</option>
+          ))
+        }
+      </select>
+    </div>
+  </div>
+
+  <div id="new-person-fields" class="form__row is-hidden">
+    <div class="form__group">
+      <label class="form__label" for="new_person_name">Nom de la nova persona</label>
+      <input class="form__input" id="new_person_name" name="new_person_name" type="text" />
+    </div>
+    <div class="form__group">
+      <label class="form__label" for="new_person_slug">Slug</label>
+      <input class="form__input" id="new_person_slug" name="new_person_slug" type="text" />
+      <p class="form__hint">Es genera automàticament a partir del nom.</p>
+    </div>
+  </div>
+
+  <div class="form__group">
+    <label class="form__label" for="quote">Cita textual</label>
+    <textarea class="form__textarea" id="quote" name="quote" rows="3" required></textarea>
+    <p class="form__hint">Copieu la frase exacta tal com apareix a la font.</p>
+  </div>
+
+  <div class="form__row">
+    <div class="form__group">
+      <label class="form__label" for="source_platform">Plataforma</label>
+      <input class="form__input" id="source_platform" name="source_platform" type="text" placeholder="X / Instagram / Facebook..." required />
+    </div>
+    <div class="form__group">
+      <label class="form__label" for="source_url">URL de la publicació</label>
+      <input class="form__input" id="source_url" name="source_url" type="url" required />
+    </div>
+  </div>
+
+  <div class="form__group">
+    <label class="form__label" for="source_archive_url">URL arxivada (opcional)</label>
+    <input class="form__input" id="source_archive_url" name="source_archive_url" type="url" />
+  </div>
+
+  <div class="form__group">
+    <label class="form__label" for="topics">Temes</label>
+    <input class="form__input" id="topics" name="topics" type="text" placeholder="identitat, immigracio, religio" />
+    <p class="form__hint">Separats per comes.</p>
+  </div>
+
+  <div class="form__section">
+    <p class="form__label">Font contextual (opcional)</p>
+    <div class="form__row">
+      <input class="form__input" name="context_publication" type="text" placeholder="Publicació" />
+      <input class="form__input" name="context_title" type="text" placeholder="Títol" />
+      <input class="form__input" name="context_url" type="url" placeholder="URL" />
+    </div>
+  </div>
+
+  <div class="form__row">
+    <div class="form__group">
+      <label class="form__label" for="media_image">Imatge (opcional)</label>
+      <input class="form__input" id="media_image" name="media_image" type="text" placeholder="/images/exhibits/EX-2026-013.png" />
+    </div>
+    <div class="form__group">
+      <label class="form__label" for="media_alt">Text alternatiu</label>
+      <input class="form__input" id="media_alt" name="media_alt" type="text" />
+    </div>
+  </div>
+
+  <div class="form__group">
+    <label class="form__label" for="context">Context</label>
+    <textarea class="form__textarea" id="context" name="context" rows="5"></textarea>
+  </div>
+
+  <div class="form__group">
+    <label class="form__label" for="what_we_know">El que sabem</label>
+    <textarea class="form__textarea" id="what_we_know" name="what_we_know" rows="5"></textarea>
+  </div>
+
+  <div class="form__group">
+    <label class="form__label" for="reading">Lectura</label>
+    <textarea class="form__textarea" id="reading" name="reading" rows="5"></textarea>
+  </div>
+
+  <div class="form__actions">
+    <button type="submit" class="btn btn--accent" id="generate-md">Generar markdown</button>
+    <button type="button" class="btn" id="reset-form">Netejar</button>
+  </div>
+</form>
+
+<div id="output" class="is-hidden" style="margin-top:2rem">
+  <h2 class="exhibit__section">Markdown generat</h2>
+  <pre id="output-exhibit" class="form__preview"></pre>
+  <div class="form__actions">
+    <button type="button" class="btn" id="copy-exhibit">Copiar al porta-retalls</button>
+    <button type="button" class="btn btn--accent" id="download-exhibit">Descarregar .md</button>
+  </div>
+
+  <div id="output-person" class="is-hidden" style="margin-top:2rem">
+    <h2 class="exhibit__section">Nova persona (també cal crear aquest fitxer)</h2>
+    <pre id="output-person-md" class="form__preview"></pre>
+    <div class="form__actions">
+      <button type="button" class="btn" id="copy-person">Copiar persona</button>
+    </div>
+  </div>
+</div>
+
+<script src="../scripts/contribute.ts"></script>

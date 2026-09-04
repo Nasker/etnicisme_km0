@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContributeForm from '../components/ContributeForm.astro';
+
+const rooms = await getCollection('rooms');
+const people = await getCollection('people');
+const exhibits = await getCollection('exhibits');
+
+const roomsData = rooms.map((r) => ({ id: r.id, title: r.data.title }));
+const peopleData = people.map((p) => ({ id: p.id, name: p.data.name }));
+const existingIds = exhibits.map((e) => e.data.id);
+---
+
+<BaseLayout title="Afegir peça">
+  <div
+    class="container container--reading"
+    style="margin-inline:auto;padding-block:2.5rem 4rem"
+  >
+    <p class="meta meta--accent">Contribucions</p>
+    <h1 class="exhibit__title" style="margin-top:.5rem">Afegir peça</h1>
+    <p class="lede">
+      Formulari per proposar una nova peça. El resultat és un fitxer markdown
+      que podeu copiar i enganxar a <code>src/content/exhibits/</code>.
+    </p>
+
+    <ContributeForm rooms={roomsData} people={peopleData} existingIds={existingIds} />
+  </div>
+</BaseLayout>
